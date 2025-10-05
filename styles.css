@@ -1,0 +1,405 @@
+:root {
+  --bg: #2c3e50;
+  --fg: #ffca28;
+  --fg-2: #ffd54f;
+  --ink: #222;
+  --line: #e0a800;
+  --overlay: rgba(0, 0, 0, 0.8);
+  --overlay-strong: rgba(0, 0, 0, 0.9);
+
+  --ui: clamp(10px, 1.6vmin, 18px);
+  --ui-lg: calc(var(--ui) * 1.25);
+  --pad: clamp(6px, 1.2vmin, 12px);
+  --gap: clamp(8px, 1.6vmin, 16px);
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg) url("img/background.png") no-repeat center/cover;
+  font-family: "Luckiest Guy", cursive, Arial, Helvetica, sans-serif;
+}
+
+body:not(.game-running) #canvas {
+  display: none !important;
+}
+
+h1 {
+  font-family: "Luckiest Guy", cursive;
+  color: #ff4500;
+  text-transform: uppercase;
+  margin: 0 0 20px;
+  font-size: clamp(42px, 6vw, 64px);
+  text-shadow: 2px 2px 6px #000;
+}
+
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 1280px;
+  aspect-ratio: 16 / 9;
+  margin: 0 auto;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.28);
+}
+canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.impressum-btn {
+  z-index: 1200;
+  padding: 10px 22px;
+  font-size: clamp(14px, 1.8vmin, 18px);
+}
+
+#impressum {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--overlay-strong);
+  z-index: 2000;
+}
+
+#impressum.d-none {
+  display: none !important;
+}
+
+.impressum-card {
+  width: min(720px, 92vw);
+  background: #ffffff;
+  color: #111;
+  border-radius: 12px;
+  padding: clamp(18px, 3vmin, 28px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+  text-align: left;
+}
+.impressum-card h2 {
+  margin: 0 0 8px;
+  color: var(--fg);
+}
+.impressum-card a {
+  color: #0b72ff;
+}
+.impressum-card .game-btn {
+  margin-top: 16px;
+}
+
+#fullscreen {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1100;
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--fg);
+  font-size: 20px;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+#fullscreen:hover {
+  transform: scale(1.08);
+  filter: brightness(1.15);
+}
+#game-container:fullscreen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+}
+#game-container:fullscreen canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.screen-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--overlay);
+  z-index: 100;
+}
+.screen-overlay img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+#game-over,
+#game-won {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--overlay-strong);
+  z-index: 999;
+}
+#game-over img,
+#game-won img {
+  width: min(90vmin, 90vw);
+  height: auto;
+  max-height: 90vh;
+  object-fit: contain;
+  position: relative;
+}
+
+.btn,
+.game-btn {
+  padding: calc(var(--pad) + 4px) calc(var(--pad) * 2);
+  font-size: var(--ui-lg);
+  background: var(--fg);
+  color: var(--ink);
+  border: 2px solid var(--line);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  z-index: 101;
+}
+.btn:hover,
+.game-btn:hover {
+  background: var(--fg-2);
+  transform: scale(1.05);
+}
+.d-none {
+  display: none !important;
+}
+
+/* Startscreen Buttons in einer Reihe */
+#start-screen .start-btn-row {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  z-index: 106;
+}
+
+#start-screen .start-btn-row .btn {
+  font-size: 20px;
+  padding: 12px 30px;
+  font-weight: bold;
+  background: #ffca28;
+  color: #111;
+  border: 3px solid #000;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 0 #000;
+}
+
+#start-screen .start-btn-row .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #000;
+}
+
+.hud-buttons {
+  position: absolute;
+  top: 55px;
+  left: 20px;
+  z-index: 102;
+}
+#mute {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+#mute:hover {
+  transform: scale(1.08);
+  filter: brightness(1.15);
+}
+#mute .icon {
+  width: 26px;
+  height: 26px;
+  color: var(--fg);
+}
+
+.controls-hint {
+  display: flex;
+  justify-content: center;
+  gap: var(--gap);
+  margin-top: 16px;
+}
+.hint-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--fg);
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.hint-key {
+  background: var(--fg);
+  color: #000;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid #000;
+}
+#btn-instructions {
+  align-self: center;
+  font-size: 16px;
+  padding: 8px 20px;
+}
+
+#modal-instructions {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--overlay-strong);
+  z-index: 3001;
+}
+#modal-instructions.d-none {
+  display: none !important;
+}
+#modal-instructions .instructions-content {
+  background: #fff;
+  color: #111;
+  width: 90vw;
+  max-width: 600px;
+  max-height: 80vh;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+#modal-instructions .instructions-content #modal-instructions-close {
+  position: absolute;
+  top: clamp(8px, 2vmin, 16px);
+  right: clamp(8px, 2vmin, 16px);
+  font-size: clamp(16px, 2.5vmin, 24px);
+  line-height: 1;
+  cursor: pointer;
+}
+#modal-instructions h2 {
+  margin-top: 0;
+  font-size: 28px;
+  color: var(--fg);
+  text-shadow: 1px 1px 2px #00000055;
+}
+#modal-instructions ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  text-align: left;
+  line-height: 1.6;
+  font-size: 18px;
+}
+#modal-instructions ul li {
+  margin-bottom: 10px;
+}
+#modal-instructions button {
+  margin-top: 20px;
+  font-size: 18px;
+  padding: 10px 24px;
+}
+
+.controls-mobile {
+  display: none !important;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  z-index: 1000;
+  padding: 10px;
+}
+.d-pad {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  display: flex;
+  gap: 10px;
+}
+.action-buttons {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  gap: 10px;
+}
+.btn-control {
+  width: 60px;
+  height: 60px;
+  background: var(--fg);
+  border: 2px solid var(--line);
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.btn-control .icon {
+  width: 28px;
+  height: 28px;
+  color: #fff;
+}
+.btn-control:active {
+  background: var(--fg-2);
+  transform: scale(0.95);
+}
+
+#orientation-hint {
+  display: none;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  text-align: center;
+  z-index: 9999;
+}
+.overlay-btn-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+  z-index: 1001;
+}
